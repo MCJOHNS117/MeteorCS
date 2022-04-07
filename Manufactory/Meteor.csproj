@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{143C464C-4773-4A7E-84E6-DC8165A5D59C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Manufactory</RootNamespace>
+    <AssemblyName>Manufactory</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AssimpNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=0d51b391f59f42a6, processorArchitecture=MSIL">
+      <HintPath>..\packages\AssimpNet.4.1.0\lib\net40\AssimpNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=3.2.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.2\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Engine\Application\Assets\AssetTypes\Animation.cs" />
+    <Compile Include="Engine\Application\Assets\AssetTypes\IAsset.cs" />
+    <Compile Include="Engine\Application\Assets\AssetCache.cs" />
+    <Compile Include="Engine\Application\Assets\AssetTypes\AudioClip.cs" />
+    <Compile Include="Engine\Application\Assets\TypeLoaders\AudioLoader.cs" />
+    <Compile Include="Engine\Application\Assets\TypeLoaders\ITypeLoader.cs" />
+    <Compile Include="Engine\Application\Assets\AssetTypes\Mesh.cs" />
+    <Compile Include="Engine\Application\Assets\Content.cs" />
+    <Compile Include="Engine\Application\Assets\AssetTypes\Texture2D.cs" />
+    <Compile Include="Engine\Application\Assets\TypeLoaders\MeshLoader.cs" />
+    <Compile Include="Engine\Application\Assets\TypeLoaders\ShaderLoader.cs" />
+    <Compile Include="Engine\Application\Assets\TypeLoaders\TextureLoader.cs" />
+    <Compile Include="Engine\Application\CInput.cs" />
+    <Compile Include="Engine\Application\CWindow.cs" />
+    <Compile Include="Engine\Application\KeyBind.cs" />
+    <Compile Include="Engine\Application\Settings.cs" />
+    <Compile Include="Engine\Fonts\Character.cs" />
+    <Compile Include="Engine\Fonts\FontType.cs" />
+    <Compile Include="Engine\Fonts\GUIText.cs" />
+    <Compile Include="Engine\Fonts\Line.cs" />
+    <Compile Include="Engine\Fonts\MetaFile.cs" />
+    <Compile Include="Engine\Fonts\TextMeshCreator.cs" />
+    <Compile Include="Engine\Fonts\TextMeshData.cs" />
+    <Compile Include="Engine\Fonts\Word.cs" />
+    <Compile Include="Engine\Graphics\Camera.cs" />
+    <Compile Include="Engine\Graphics\ChunkBufferObject.cs" />
+    <Compile Include="Engine\Graphics\IndexBuffer.cs" />
+    <Compile Include="Engine\Graphics\Renderers\CanvasRenderer.cs" />
+    <Compile Include="Engine\Graphics\Renderers\MeshRenderer.cs" />
+    <Compile Include="Engine\Graphics\Renderers\Renderer.cs" />
+    <Compile Include="Engine\Graphics\VertexArray.cs" />
+    <Compile Include="Engine\Graphics\VertexBuffer.cs" />
+    <Compile Include="Engine\Graphics\VertexBufferLayout.cs" />
+    <Compile Include="Engine\Scene\Bounds.cs" />
+    <Compile Include="Engine\Scene\CObject.cs" />
+    <Compile Include="Engine\Scene\Component.cs" />
+    <Compile Include="Engine\Scene\Components\MeshRenderer.cs" />
+    <Compile Include="Engine\Scene\GameObject.cs" />
+    <Compile Include="Engine\Scene\Scene.cs" />
+    <Compile Include="Engine\Scene\SceneManager.cs" />
+    <Compile Include="Engine\Scene\Transform.cs" />
+    <Compile Include="Engine\UI\Canvas.cs" />
+    <Compile Include="Engine\UI\Panel.cs" />
+    <Compile Include="Engine\UI\Rect.cs" />
+    <Compile Include="Engine\UI\RectTransform.cs" />
+    <Compile Include="Engine\UI\UIElement.cs" />
+    <Compile Include="Engine\Utils\ObjectFactory.cs" />
+    <Compile Include="Engine\Graphics\Renderers\FontRenderer.cs" />
+    <Compile Include="Engine\Graphics\Renderers\StaticRenderer.cs" />
+    <Compile Include="Engine\Graphics\RenderBase.cs" />
+    <Compile Include="Engine\Application\Assets\AssetTypes\Shader.cs" />
+    <Compile Include="Engine\Graphics\Renderers\TextureRenderer.cs" />
+    <Compile Include="Engine\Utils\Ray.cs" />
+    <Compile Include="Engine\Utils\Vertex.cs" />
+    <Compile Include="Game\Cameras\FlyThroughCamera.cs" />
+    <Compile Include="Game\Cameras\OrbitCamera.cs" />
+    <Compile Include="Game\Data\Block.cs" />
+    <Compile Include="Game\Data\BlockType.cs" />
+    <Compile Include="Game\Data\BlockTypeCollection.cs" />
+    <Compile Include="Game\Data\Chunk.cs" />
+    <Compile Include="Game\Data\EDirection.cs" />
+    <Compile Include="Game\Data\VoxelData.cs" />
+    <Compile Include="Game\Data\World.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="Data\Gameplay\Blocks.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Fonts\berlinsans.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Models\Belt1Straight.png" />
+    <Content Include="Data\Models\VoxelMagic\exported_texture0.png" />
+    <Content Include="Data\Models\VoxelMagic\LeftBeltRed-2.png" />
+    <Content Include="Data\Models\VoxelMagic\LeftBeltRed-4.png" />
+    <Content Include="Data\Models\VoxelMagic\StraightBeltRed-1-Tex.png" />
+    <Content Include="Data\Models\VoxelMagic\StraightBeltRed-1.png" />
+    <Content Include="Data\Models\VoxelMagic\StraightBeltRed-2-Tex.png" />
+    <Content Include="Data\Models\VoxelMagic\StraightBeltRed-3-Tex.png" />
+    <Content Include="Data\Models\VoxelMagic\StraightBeltRed-4-Tex.png" />
+    <Content Include="Data\Textures\atlas.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Textures\brickwall.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Textures\grass.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Textures\stones.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Textures\UI\panelTest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Data\Fonts\berlinsans.fnt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Models\Belt1Straight.mtl" />
+    <None Include="Data\Models\Belt1Straight.obj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Models\Belt1Straight.vox" />
+    <None Include="Data\Models\cube.obj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Models\test.fbx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Models\test.obj">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Models\VoxelMagic\exported-1.dae" />
+    <None Include="Data\Models\VoxelMagic\exported.dae" />
+    <None Include="Data\Models\VoxelMagic\LeftBeltRed-1.vox" />
+    <None Include="Data\Models\VoxelMagic\LeftBeltRed-2.mtl" />
+    <None Include="Data\Models\VoxelMagic\LeftBeltRed-2.obj" />
+    <None Include="Data\Models\VoxelMagic\LeftBeltRed-2.vox" />
+    <None Include="Data\Models\VoxelMagic\LeftBeltRed-3.vox" />
+    <None Include="Data\Models\VoxelMagic\LeftBeltRed-4.mtl" />
+    <None Include="Data\Models\VoxelMagic\LeftBeltRed-4.obj" />
+    <None Include="Data\Models\VoxelMagic\LeftBeltRed-4.vox" />
+    <None Include="Data\Models\VoxelMagic\RightBeltRed-1.vox" />
+    <None Include="Data\Models\VoxelMagic\RightBeltRed-2.vox" />
+    <None Include="Data\Models\VoxelMagic\RightBeltRed-3.vox" />
+    <None Include="Data\Models\VoxelMagic\RightBeltRed-4.vox" />
+    <None Include="Data\Models\VoxelMagic\StraightBeltRed-1.mtl" />
+    <None Include="Data\Models\VoxelMagic\StraightBeltRed-1.obj" />
+    <None Include="Data\Models\VoxelMagic\StraightBeltRed-1.vox" />
+    <None Include="Data\Models\VoxelMagic\StraightBeltRed-2.vox" />
+    <None Include="Data\Models\VoxelMagic\StraightBeltRed-3.vox" />
+    <None Include="Data\Models\VoxelMagic\StraightBeltRed-4.vox" />
+    <None Include="Data\Shaders\diffuse.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Shaders\font.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Shaders\gui.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Shaders\textured.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="OpenTK.dll.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="settings.cfg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\AssimpNet.4.1.0\build\AssimpNet.targets" Condition="Exists('..\packages\AssimpNet.4.1.0\build\AssimpNet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\AssimpNet.4.1.0\build\AssimpNet.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\AssimpNet.4.1.0\build\AssimpNet.targets'))" />
+  </Target>
+</Project>
