@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace Meteor.Game.Data
+namespace MeteorGame
 {
 	public class BlockTypeCollection : Dictionary<ushort, BlockType>
 	{
@@ -20,7 +20,7 @@ namespace Meteor.Game.Data
 			List<BlockType> values = serializer.Deserialize(reader) as List<BlockType>;
 			reader.Close();
 
-			foreach(BlockType block in values)
+			foreach (BlockType block in values)
 			{
 				this.Add(block.Type, block);
 			}

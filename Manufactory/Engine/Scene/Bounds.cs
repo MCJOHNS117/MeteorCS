@@ -1,11 +1,6 @@
-﻿using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OpenTK.Mathematics;
 
-namespace Meteor.Engine.Scene
+namespace MeteorEngine
 {
 	/// <summary>
 	/// Represents an axis aligned bounding box
@@ -29,7 +24,7 @@ namespace Meteor.Engine.Scene
 
 		public Vector3 ClosestPoint(Vector3 point)
 		{
-			Vector3 max = Max;	//Cache to prevent unneccesary calculations
+			Vector3 max = Max;  //Cache to prevent unneccesary calculations
 			Vector3 min = Min;
 
 			Vector3 result = point; //Set to origin point to remove unnecesary else statement

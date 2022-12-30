@@ -1,6 +1,6 @@
-﻿using OpenTK;
+﻿using OpenTK.Mathematics;
 
-namespace Meteor.Engine.UI
+namespace MeteorEngine
 {
 	public class Rect
 	{

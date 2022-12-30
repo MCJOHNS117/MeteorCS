@@ -3,18 +3,25 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace Meteor.Engine.Application.Assets.TypeLoaders
+namespace MeteorEngine
 {
-	public class ShaderLoader : ITypeLoader
+	internal class ShaderImporter : ITypeImporter
 	{
 		private KeyValuePair<ShaderType, string>[] shaderTypeDelimiters = {
-			new KeyValuePair<ShaderType, string>(ShaderType.VertexShader, "--VERTEX--"), 
+			new KeyValuePair<ShaderType, string>(ShaderType.VertexShader, "--VERTEX--"),
 			new KeyValuePair<ShaderType, string>(ShaderType.FragmentShader, "--FRAGMENT--"),
-			new KeyValuePair<ShaderType, string>(ShaderType.GeometryShader,  "--GEOMETRY--"), 
-			new KeyValuePair<ShaderType, string>(ShaderType.ComputeShader, "--COMPUTE--"), 
-			new KeyValuePair<ShaderType, string>(ShaderType.TessEvaluationShader, "--TESS-EVAL--"), 
+			new KeyValuePair<ShaderType, string>(ShaderType.GeometryShader,  "--GEOMETRY--"),
+			new KeyValuePair<ShaderType, string>(ShaderType.ComputeShader, "--COMPUTE--"),
+			new KeyValuePair<ShaderType, string>(ShaderType.TessEvaluationShader, "--TESS-EVAL--"),
 			new KeyValuePair<ShaderType, string>(ShaderType.TessControlShader, "--TESS-CONTROL--")
 		};
+
+		public string BasePath { get; }
+
+		public ShaderImporter(string basePath)
+		{
+			BasePath = basePath;
+		}
 
 		private class ShaderFactory : Shader
 		{
@@ -65,11 +72,11 @@ namespace Meteor.Engine.Application.Assets.TypeLoaders
 			}
 		}
 
-		public object LoadAsset(string path)
+		public object ImportAsset(string filename)
 		{
 			ShaderFactory shader = new ShaderFactory();
 
-			string shaderSource = File.ReadAllText(path);
+			string shaderSource = File.ReadAllText(BasePath + filename);
 
 			for (int i = 0; i < shaderTypeDelimiters.Length; i++)
 			{

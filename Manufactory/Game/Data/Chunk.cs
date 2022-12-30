@@ -1,9 +1,8 @@
-﻿using Meteor.Engine.Graphics;
-using OpenTK;
+﻿using OpenTK.Mathematics;
 using System;
 using System.Collections.Generic;
 
-namespace Meteor.Game.Data
+namespace MeteorGame
 {
 	public class Chunk
 	{
@@ -118,8 +117,8 @@ namespace Meteor.Game.Data
 
 		private bool IsVoxelInWorld(Vector3 pos)
 		{
-			return (pos.X > -VoxelData.WorldSizeInVoxels && pos.X < VoxelData.WorldSizeInVoxels) 
-				&& (pos.Y > 0 && pos.X < VoxelData.ChunkHeight) 
+			return (pos.X > -VoxelData.WorldSizeInVoxels && pos.X < VoxelData.WorldSizeInVoxels)
+				&& (pos.Y > 0 && pos.X < VoxelData.ChunkHeight)
 				&& (pos.Z > -VoxelData.WorldSizeInVoxels && pos.Z < VoxelData.WorldSizeInVoxels);
 		}
 
@@ -144,7 +143,7 @@ namespace Meteor.Game.Data
 				_requiresUpdate = false;
 			}
 		}
-		
+
 		private void CreateMesh()
 		{
 			List<Vector3> positions = new List<Vector3>();
@@ -292,12 +291,12 @@ namespace Meteor.Game.Data
 			//return Math.Abs(other.X - X) + Math.Abs(other.Z - Z);
 		}
 
-		public static ChunkCoord operator+(ChunkCoord left, ChunkCoord right)
+		public static ChunkCoord operator +(ChunkCoord left, ChunkCoord right)
 		{
 			return new ChunkCoord(left.X + right.X, left.Z + right.Z);
 		}
 
-		public static ChunkCoord operator-(ChunkCoord left, ChunkCoord right)
+		public static ChunkCoord operator -(ChunkCoord left, ChunkCoord right)
 		{
 			return new ChunkCoord(left.X - right.X, left.Z - right.Z);
 		}

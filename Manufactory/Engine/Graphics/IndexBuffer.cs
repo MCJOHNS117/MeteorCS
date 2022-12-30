@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
 
-namespace Meteor.Engine.Graphics
+namespace MeteorEngine
 {
 	public class IndexBuffer : IDisposable
 	{

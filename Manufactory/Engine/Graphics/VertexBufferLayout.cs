@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Meteor.Engine.Graphics
+namespace MeteorEngine
 {
 	public struct VertexBufferElement
 	{
@@ -14,7 +14,7 @@ namespace Meteor.Engine.Graphics
 
 		public static int GetSizeOfType(VertexAttribPointerType type)
 		{
-			switch(type)
+			switch (type)
 			{
 				case VertexAttribPointerType.Float: return 4;
 				case VertexAttribPointerType.Int: return 4;
@@ -22,7 +22,7 @@ namespace Meteor.Engine.Graphics
 			}
 
 			throw new Exception("VertexBufferElement.GetSizeOfType: Error - \"" + type.ToString() +
-			                    "\" not supported.");
+								"\" not supported.");
 			return 0;
 		}
 	}
@@ -42,7 +42,7 @@ namespace Meteor.Engine.Graphics
 			{
 				count = count,
 				normalized = false,
-				type = vertexAttribPointerType, 
+				type = vertexAttribPointerType,
 				stride = count * VertexBufferElement.GetSizeOfType(vertexAttribPointerType),
 				size = size
 			});

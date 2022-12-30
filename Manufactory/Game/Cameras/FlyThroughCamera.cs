@@ -1,11 +1,11 @@
-﻿using Meteor.Engine.Application;
-using Meteor.Engine.Graphics;
-using OpenTK;
-using OpenTK.Input;
+﻿using MeteorEngine;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
-using KeyModifiers = Meteor.Engine.Application.KeyModifiers;
 
-namespace Meteor.Game.Cameras
+using KeyModifiers = MeteorEngine.KeyModifiers;
+
+namespace MeteorGame
 {
 	public class FlyThroughCamera : Camera
 	{
@@ -20,17 +20,17 @@ namespace Meteor.Game.Cameras
 
 		public FlyThroughCamera()
 		{
-			CInput.AddKeybind(new KeyBind(Key.W), BindType.OnKeyDown, () => moveForward = true );
-			CInput.AddKeybind(new KeyBind(Key.S), BindType.OnKeyDown, () => moveBack = true);
-			CInput.AddKeybind(new KeyBind(Key.D), BindType.OnKeyDown, () => moveRight = true);
-			CInput.AddKeybind(new KeyBind(Key.A), BindType.OnKeyDown, () => moveLeft = true);
-			CInput.AddKeybind(new KeyBind(Key.LShift, (byte)KeyModifiers.Shift), BindType.OnKeyDown, () => SetSprint(true));
+			CInput.AddKeybind(new KeyBind(Keys.W), BindType.OnKeyDown, () => moveForward = true);
+			CInput.AddKeybind(new KeyBind(Keys.S), BindType.OnKeyDown, () => moveBack = true);
+			CInput.AddKeybind(new KeyBind(Keys.D), BindType.OnKeyDown, () => moveRight = true);
+			CInput.AddKeybind(new KeyBind(Keys.A), BindType.OnKeyDown, () => moveLeft = true);
+			CInput.AddKeybind(new KeyBind(Keys.LeftShift, (byte)KeyModifiers.Shift), BindType.OnKeyDown, () => SetSprint(true));
 
-			CInput.AddKeybind(new KeyBind(Key.W), BindType.OnKeyUp, () => moveForward = false);
-			CInput.AddKeybind(new KeyBind(Key.S), BindType.OnKeyUp, () => moveBack = false);
-			CInput.AddKeybind(new KeyBind(Key.D), BindType.OnKeyUp, () => moveRight = false);
-			CInput.AddKeybind(new KeyBind(Key.A), BindType.OnKeyUp, () => moveLeft = false);
-			CInput.AddKeybind(new KeyBind(Key.LShift, (byte)KeyModifiers.Shift), BindType.OnKeyUp, () => SetSprint(false));
+			CInput.AddKeybind(new KeyBind(Keys.W), BindType.OnKeyUp, () => moveForward = false);
+			CInput.AddKeybind(new KeyBind(Keys.S), BindType.OnKeyUp, () => moveBack = false);
+			CInput.AddKeybind(new KeyBind(Keys.D), BindType.OnKeyUp, () => moveRight = false);
+			CInput.AddKeybind(new KeyBind(Keys.A), BindType.OnKeyUp, () => moveLeft = false);
+			CInput.AddKeybind(new KeyBind(Keys.LeftShift, (byte)KeyModifiers.Shift), BindType.OnKeyUp, () => SetSprint(false));
 
 
 			_front = new Vector3(0, 0, 1);
@@ -39,7 +39,7 @@ namespace Meteor.Game.Cameras
 
 		public override void Update(float deltaTime)
 		{
-			if(CInput.IsMousePressed(MouseButton.Right))
+			if (CInput.IsMousePressed(MouseButton.Right))
 			{
 				Vector2 mouseDelta = CInput.MouseDelta;
 
@@ -78,7 +78,7 @@ namespace Meteor.Game.Cameras
 			{
 				_position += Vector3.Normalize(Vector3.Cross(_front, _up)) * speed * deltaTime;
 			}
-			
+
 			_front.X = (float)Math.Cos(MathHelper.DegreesToRadians(_rotation.Y)) * (float)Math.Cos(MathHelper.DegreesToRadians(_rotation.X));
 			_front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(_rotation.Y));
 			_front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(_rotation.Y)) * (float)Math.Sin(MathHelper.DegreesToRadians(_rotation.X));

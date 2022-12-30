@@ -1,6 +1,6 @@
-﻿using OpenTK;
+﻿using OpenTK.Mathematics;
 
-namespace Meteor.Game.Data
+namespace MeteorGame
 {
 	public static class VoxelData
 	{

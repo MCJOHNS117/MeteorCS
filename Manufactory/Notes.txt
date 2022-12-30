@@ -1,0 +1,39 @@
+﻿ECS Architecture
+
+Entity : GameObjects
+
+Components : Component
+
+System : Scene
+
+
+Inheritence Tree
+
+Object
+	GameObject
+		Light
+			Spot Light
+			Point Light
+			Direction Light
+		Sound
+			AreaSound
+			SoundEffect
+			Music
+		Camera
+	Component
+		Transform
+			RectTransform
+		Renderer
+			MeshRenderer
+			CanvasRenderer
+		Behaviour
+	Canvas
+	UIElement
+		Image
+		Panel
+		Button
+		Checkbox
+		ProgressBar
+		Slider
+		InputBox
+		TextBox

@@ -1,12 +1,8 @@
-﻿using Meteor.Engine.Graphics;
-using OpenTK;
+﻿using MeteorEngine;
+using OpenTK.Mathematics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Meteor.Game.Cameras
+namespace MeteorGame
 {
 	public class OrbitCamera : Camera
 	{
@@ -37,7 +33,7 @@ namespace Meteor.Game.Cameras
 
 		public override void Update(float deltaTime)
 		{
-			if(_rotate)
+			if (_rotate)
 				_rotation += _speed * deltaTime;
 		}
 

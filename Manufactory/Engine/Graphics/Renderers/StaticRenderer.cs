@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
 
-namespace Meteor.Engine.Graphics.Renderers
+namespace MeteorEngine
 {
 	public class StaticRenderer : RenderBase
 	{

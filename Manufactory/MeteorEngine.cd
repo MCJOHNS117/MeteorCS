@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MeteorEngine.Object" Collapsed="true">
+    <Position X="2.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAABACABAACEgAQAKEQABABABIAAAAAAAEABAiA=</HashCode>
+      <FileName>Engine\Application\Object.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="MeteorEngine.GameObject" Collapsed="true">
+    <Position X="5.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAGAoIIAAAAQABAQwAAAAgAAUAAAAAAAACoA=</HashCode>
+      <FileName>Engine\Scene\GameObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeteorEngine.Component" Collapsed="true">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="MeteorEngine.Object" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="1.812" />
+        <Point X="3.5" Y="3.125" />
+        <Point X="5.25" Y="3.125" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAiAAAAAAAAAAIAQAAQAAAAAAAAAAAAIAAEA=</HashCode>
+      <FileName>Engine\Scene\Component.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeteorEngine.Renderer" Collapsed="true">
+    <Position X="7.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Engine\Scene\Components\Renderer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeteorEngine.MeshRenderer" Collapsed="true">
+    <Position X="10.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAQAAIAAAAAA=</HashCode>
+      <FileName>Engine\Scene\Components\MeshRenderer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeteorEngine.Transform" Collapsed="true">
+    <Position X="7.75" Y="4" Width="1.5" />
+    <InheritanceLine Type="MeteorEngine.Component" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="3.441" />
+        <Point X="6" Y="4.375" />
+        <Point X="7.75" Y="4.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAWAAAADQIEIAwIAJAQAAQEAIAAAIBCEAGkAAAAGI=</HashCode>
+      <FileName>Engine\Scene\Transform.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeteorEngine.RectTransform" Collapsed="true">
+    <Position X="10.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Engine\Scene\RectTransform.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="MeteorEngine.Flags" Collapsed="true">
+    <Position X="0.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAABICAAAAEAACAAAAAAAEAAAEAAAQ=</HashCode>
+      <FileName>Engine\Application\Object.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

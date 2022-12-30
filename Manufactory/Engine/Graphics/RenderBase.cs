@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using System;
 
-namespace Meteor.Engine.Graphics
+namespace MeteorEngine
 {
 	public abstract class RenderBase : IDisposable
 	{
@@ -29,9 +29,9 @@ namespace Meteor.Engine.Graphics
 
 		protected virtual void Dispose(bool disposing)
 		{
-			if(disposing)
+			if (disposing)
 			{
-				if(_initialized)
+				if (_initialized)
 				{
 					GL.DeleteVertexArray(_vertexArray);
 					GL.DeleteBuffer(_buffer);

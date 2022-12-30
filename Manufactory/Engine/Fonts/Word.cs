@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Meteor.Engine.Fonts
+namespace MeteorEngine
 {
 	public class Word
 	{

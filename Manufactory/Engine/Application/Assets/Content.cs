@@ -1,8 +1,7 @@
-﻿using Meteor.Engine.Application.Assets.TypeLoaders;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Meteor.Engine.Application.Assets
+namespace MeteorEngine
 {
 	public static class Content
 	{
@@ -10,20 +9,26 @@ namespace Meteor.Engine.Application.Assets
 
 		private static AssetCache _assetCache;
 
-		private static Dictionary<Type, ITypeLoader> _typeLoaders = new Dictionary<Type, ITypeLoader>();
+		private static Dictionary<Type, ITypeImporter> _typeLoaders = new Dictionary<Type, ITypeImporter>();
 
 		public static void Initialize()
 		{
-			_supportedExtensions.Add(typeof(Texture2D), new List<string>() { "bmp", "gif" , "jpg", "jpeg", "jpe", "jif", "jfif", "jfi", "png", "tif", "tiff" });
-			_supportedExtensions.Add(typeof(Mesh), new List<string>() { "fbx", "dae", "gltf", "glb", "blend", "3ds", "ase", "obj", "ifc", "xgl", "zgl", "ply", "lwo", "lws", "stl", "x", "ac", "ms3d" });
-			_supportedExtensions.Add(typeof(AudioClip), new List<string>() { "mp3", "wav" });
-			_supportedExtensions.Add(typeof(Shader), new List<string>() { "sh" });
-
 			_assetCache = new AssetCache();
 
-			_typeLoaders.Add(typeof(Texture2D), new TextureLoader());
-			_typeLoaders.Add(typeof(Shader), new ShaderLoader());
-			_typeLoaders.Add(typeof(Mesh), new MeshLoader());
+			_supportedExtensions.Add(typeof(Texture2D), new List<string>() { "bmp", "gif", "jpg", "jpeg", "jpe", "jif", "jfif", "jfi", "png", "tif", "tiff" });
+			_typeLoaders.Add(typeof(Texture2D), new TextureImporter(@"Data\\Textures\\"));
+
+			_supportedExtensions.Add(typeof(Model), new List<string>() { "fbx", "dae", "gltf", "glb", "blend", "3ds", "ase", "obj", "ifc", "xgl", "zgl", "ply", "lwo", "lws", "stl", "x", "ac", "ms3d" });
+			_typeLoaders.Add(typeof(Model), new ModelImporter(@"Data\\Models\\"));
+
+			_supportedExtensions.Add(typeof(AudioClip), new List<string>() { "mp3", "wav" });
+			_typeLoaders.Add(typeof(AudioClip), new AudioImporter(@"Data\\Audio\\"));
+
+			_supportedExtensions.Add(typeof(Shader), new List<string>() { "sh" });
+			_typeLoaders.Add(typeof(Shader), new ShaderImporter(@"Data\\Shaders\\"));
+
+			_supportedExtensions.Add(typeof(Material), new List<string> { "mat" });
+			_typeLoaders.Add(typeof(Material), new MaterialImporter(@"Data\\Materials\\"));
 		}
 
 		/// <summary>
@@ -38,7 +43,7 @@ namespace Meteor.Engine.Application.Assets
 			string ext = GetExtension(filename);
 
 			//Check if the file extension is supported
-			if(_supportedExtensions.ContainsKey(typeof(type)) && _supportedExtensions[typeof(type)].Contains(ext))
+			if (_supportedExtensions.ContainsKey(typeof(type)) && _supportedExtensions[typeof(type)].Contains(ext))
 			{
 				//First check the asset cache to see if this content is already loaded.
 				type asset = _assetCache.GetCachedObject(filename) as type;
@@ -51,8 +56,9 @@ namespace Meteor.Engine.Application.Assets
 				if (_typeLoaders.ContainsKey(typeof(type)))
 				{
 					//Attempt to load the file and add it to the asset cache.
-					asset = _typeLoaders[typeof(type)].LoadAsset(filename) as type;
-					_assetCache.CacheObject(filename, asset);
+					asset = _typeLoaders[typeof(type)].ImportAsset(filename) as type;
+					if (typeof(IAsset).IsAssignableFrom(typeof(type)))
+						_assetCache.CacheObject(filename, asset);
 					return asset;
 				}
 			}
@@ -67,12 +73,17 @@ namespace Meteor.Engine.Application.Assets
 		/// <returns></returns>
 		private static string GetExtension(string filename)
 		{
-			return filename.Substring(filename.LastIndexOf('.')+1).ToLower();
+			return filename.Substring(filename.LastIndexOf('.') + 1).ToLower();
+		}
+
+		public static string GetAssetName(IAsset asset)
+		{
+			return _assetCache.GetAssetName(asset);
 		}
 
 		public static void UnloadAsset(IAsset asset)
 		{
-
+			_assetCache.UnloadObject(GetAssetName(asset));
 		}
 	}
 }

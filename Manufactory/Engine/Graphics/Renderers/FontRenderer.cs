@@ -1,8 +1,7 @@
-﻿using Meteor.Engine.Application.Assets;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using System;
 
-namespace Meteor.Engine.Graphics.Renderers
+namespace MeteorEngine
 {
 	public class FontRenderer : RenderBase
 	{

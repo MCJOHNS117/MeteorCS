@@ -1,8 +1,8 @@
-﻿using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
+using System;
 
-namespace Meteor.Engine.Graphics
+namespace MeteorEngine
 {
 	public class VertexBuffer : IDisposable
 	{

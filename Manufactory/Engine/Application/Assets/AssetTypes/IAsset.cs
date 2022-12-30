@@ -1,4 +1,4 @@
-﻿namespace Meteor.Engine.Application.Assets
+﻿namespace MeteorEngine
 {
 	public interface IAsset
 	{

@@ -1,4 +1,4 @@
-﻿namespace Meteor.Engine.Fonts
+﻿namespace MeteorEngine
 {
 	public class Character
 	{

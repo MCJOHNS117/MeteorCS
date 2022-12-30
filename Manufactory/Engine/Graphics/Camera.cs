@@ -1,9 +1,7 @@
-﻿using Meteor.Engine.Application;
-using Meteor.Engine.Utils;
-using OpenTK;
+﻿using OpenTK.Mathematics;
 using System;
 
-namespace Meteor.Engine.Graphics
+namespace MeteorEngine
 {
 	public abstract class Camera
 	{
@@ -56,7 +54,7 @@ namespace Meteor.Engine.Graphics
 
 
 		protected abstract void CalculateViewMatrix();
-		
+
 		public void CreateProjectionMatrix()
 		{
 			Settings.GetInt("screen_width", out _screenWidth);

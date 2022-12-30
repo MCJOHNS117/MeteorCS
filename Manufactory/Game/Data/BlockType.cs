@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Meteor.Game.Data
+namespace MeteorGame
 {
 	[Serializable]
 	public class BlockType

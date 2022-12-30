@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Meteor.Engine.Application.Assets
+﻿namespace MeteorEngine
 {
-	public class AudioClip
+	public class AudioClip : IAsset
 	{
 		public AudioClip()
 		{
-			
+
+		}
+
+		public void Dispose()
+		{
+			Content.UnloadAsset(this);
 		}
 	}
 }

@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using Assimp;
+﻿using Assimp;
 using Assimp.Configs;
-using OpenTK;
+using OpenTK.Mathematics;
+using System;
+using System.Collections.Generic;
 
-namespace Meteor.Engine.Application.Assets.TypeLoaders
+namespace MeteorEngine
 {
-	public class MeshLoader : ITypeLoader
+	internal class ModelImporter : ITypeImporter
 	{
-		public object LoadAsset(string path)
+		public static PostProcessSteps PostProcessFlags = PostProcessSteps.Triangulate | PostProcessSteps.JoinIdenticalVertices | PostProcessSteps.FixInFacingNormals | PostProcessSteps.OptimizeMeshes | PostProcessSteps.CalculateTangentSpace;
+
+		public string BasePath { get; }
+
+		public ModelImporter(string basePath)
+		{
+			BasePath = basePath;
+		}
+
+		public object ImportAsset(string filename)
 		{
 			AssimpContext importer = new AssimpContext();
 			importer.SetConfig(new NormalSmoothingAngleConfig(66.0f));
@@ -17,45 +26,44 @@ namespace Meteor.Engine.Application.Assets.TypeLoaders
 
 			try
 			{
-				scene = importer.ImportFile(path, PostProcessSteps.Triangulate);
+				scene = importer.ImportFile(BasePath + filename, PostProcessFlags);
 
 				if (scene == null || scene.RootNode == null)
 					throw new Exception("MeshLoader.LoadAsset: Incorrect mesh file.");
 
-				Mesh mesh = ProcessNode(scene.RootNode, scene);
+				Model result = new Model();
 
-				return mesh;
+				ProcessNode(scene.RootNode, scene, result);
+
+				return result;
 			}
 			catch (Exception e)
 			{
-				
+
 			}
 
 			return null;
 		}
 
-		private Mesh ProcessNode(Node node, Assimp.Scene scene)
+		private void ProcessNode(Node node, Assimp.Scene scene, Model model)
 		{
-			return ProcessMesh(scene.Meshes[0], scene);
+			for (int i = 0; i < node.MeshCount; i++)
+			{
+				Assimp.Mesh assimpMesh = scene.Meshes[node.MeshIndices[i]];
+				model.AddMesh(ProcessMesh(assimpMesh, scene));
+			}
 
-			return null;
-
-			//for (int i = 0; i < node.MeshCount; i++)
-			//{
-			//	Assimp.Mesh assimpMesh = scene.Meshes[node.MeshIndices[i]];
-			//	ProcessMesh(assimpMesh, scene);
-			//}
-
-			//for (int i = 0; i < node.ChildCount; i++)
-			//{
-			//	ProcessNode(node.Children[i], scene, mesh);
-			//}
+			for (int i = 0; i < node.ChildCount; i++)
+			{
+				ProcessNode(node.Children[i], scene, model);
+			}
 		}
 
 		private Mesh ProcessMesh(Assimp.Mesh assimpMesh, Assimp.Scene scene)
 		{
 			List<Vector3> vertices = new List<Vector3>();
 			List<Vector3> normals = new List<Vector3>();
+			List<Vector3> tangents = new List<Vector3>();
 			List<Vector2> uvs = new List<Vector2>();
 			List<int> triangles = new List<int>();
 
@@ -72,6 +80,11 @@ namespace Meteor.Engine.Application.Assets.TypeLoaders
 				vertex.Y = assimpMesh.Normals[i].Y;
 				vertex.Z = assimpMesh.Normals[i].Z;
 				normals.Add(vertex);
+
+				vertex.X = assimpMesh.Tangents[i].X;
+				vertex.Y = assimpMesh.Tangents[i].Y;
+				vertex.Z = assimpMesh.Tangents[i].Z;
+				tangents.Add(vertex);
 
 				if (assimpMesh.TextureCoordinateChannels[0].Count > 0)
 				{
@@ -97,6 +110,7 @@ namespace Meteor.Engine.Application.Assets.TypeLoaders
 			Mesh mesh = new Mesh();
 			mesh.SetVertices(vertices.ToArray());
 			mesh.SetNormals(normals.ToArray());
+			mesh.SetTangents(tangents.ToArray());
 			mesh.SetUVs(uvs.ToArray());
 			mesh.SetTriangles(triangles.ToArray());
 

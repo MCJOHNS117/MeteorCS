@@ -1,11 +1,18 @@
-﻿using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using System.Drawing;
 
-namespace Meteor.Engine.Application.Assets.TypeLoaders
+namespace MeteorEngine
 {
-	public class TextureLoader : ITypeLoader
+	internal class TextureImporter : ITypeImporter
 	{
+		public string BasePath { get; }
+
+		public TextureImporter(string basePath)
+		{
+			BasePath = basePath;
+		}
+
 		private class TextureData
 		{
 			public Color4[] colorData;
@@ -22,10 +29,10 @@ namespace Meteor.Engine.Application.Assets.TypeLoaders
 			}
 		}
 
-		public object LoadAsset(string filename)
+		public object ImportAsset(string filename)
 		{
 			int width, height, _texture;
-			var data = LoadTexture(filename, out width, out height);
+			var data = LoadTexture(BasePath + filename, out width, out height);
 			GL.CreateTextures(TextureTarget.Texture2D, 1, out _texture);
 			GL.TextureStorage2D(_texture, 1, SizedInternalFormat.Rgba32f, width, height);
 
@@ -44,6 +51,16 @@ namespace Meteor.Engine.Application.Assets.TypeLoaders
 			GL.TextureParameterI(_texture, TextureParameterName.TextureMagFilter, ref textureMagFilter);
 
 			return new FactoryTexture2D(_texture, width, height, data.colorData);
+		}
+
+		public void SerializeAsset(IAsset asset)
+		{
+			Texture2D texture = asset as Texture2D;
+
+			if (texture != null)
+			{
+				//Do stuff
+			}
 		}
 
 		private TextureData LoadTexture(string filename, out int width, out int height)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace Meteor.Engine.Fonts
+namespace MeteorEngine
 {
 	public class MetaFile
 	{
@@ -53,7 +53,7 @@ namespace Meteor.Engine.Fonts
 			{
 				_reader = new StreamReader(File.Open(filename, FileMode.Open));
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				Debug.WriteLine(e);
 			}
@@ -117,7 +117,7 @@ namespace Meteor.Engine.Fonts
 				nums = values[variable].Split(NUMBER_SEPERATOR);
 
 			int[] intVals = new int[nums.Length];
-			for(int i = 0; i < nums.Length; i++)
+			for (int i = 0; i < nums.Length; i++)
 			{
 				intVals[i] = Int32.Parse(nums[i]);
 			}
@@ -137,7 +137,7 @@ namespace Meteor.Engine.Fonts
 		{
 			ProcessNextLine();
 			ProcessNextLine();
-			while(ProcessNextLine())
+			while (ProcessNextLine())
 			{
 				Character c = LoadCharacter(imageWidth);
 				if (c != null)
@@ -148,7 +148,7 @@ namespace Meteor.Engine.Fonts
 		private Character LoadCharacter(int imageSize)
 		{
 			int id = GetValueOfVariable("id");
-			if(id == int.MaxValue)
+			if (id == int.MaxValue)
 			{
 				return null;
 			}

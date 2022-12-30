@@ -1,0 +1,9 @@
+﻿--shader--
+filename:diffuse.sh
+--shader--
+--textures--
+diffuse:grass.jpg
+--textures--
+--color--
+1.0:1.0:1.0:1.0
+--color--

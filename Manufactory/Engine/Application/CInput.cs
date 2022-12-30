@@ -1,9 +1,9 @@
-﻿using OpenTK;
-using OpenTK.Input;
+﻿using OpenTK.Mathematics;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
 
-namespace Meteor.Engine.Application
+namespace MeteorEngine
 {
 	[Flags]
 	public enum BindType
@@ -30,10 +30,10 @@ namespace Meteor.Engine.Application
 		private static Vector2 _mouseDelta = new Vector2();
 		private static Vector2 _mousePosition = new Vector2();
 
-		public static Vector2 MouseDelta {  get { return _mouseDelta; } }
+		public static Vector2 MouseDelta { get { return _mouseDelta; } }
 		public static Vector2 MousePosition { get { return _mousePosition; } }
 
-		public static void OnMouseMove(int x, int y, int dx, int dy)
+		public static void OnMouseMove(float x, float y, float dx, float dy)
 		{
 			_mouseDelta = new Vector2(dx, dy);
 			_mousePosition = new Vector2(x, y);
@@ -54,20 +54,20 @@ namespace Meteor.Engine.Application
 			return _mouseButtons[(int)mouseButton];
 		}
 
-		public static void OnKeyDown(Key key)
+		public static void OnKeyDown(Keys key)
 		{
 			KeyModifiers mods = 0;
-			if (key == Key.LShift || key == Key.RShift)
+			if (key == Keys.LeftShift || key == Keys.RightShift)
 			{
 				mods |= KeyModifiers.Shift;
 			}
 
-			if(key == Key.LControl || key == Key.RControl)
+			if (key == Keys.LeftControl || key == Keys.RightControl)
 			{
 				mods |= KeyModifiers.Ctrl;
 			}
 
-			if(key == Key.LAlt || key == Key.RAlt)
+			if (key == Keys.LeftAlt || key == Keys.RightAlt)
 			{
 				mods |= KeyModifiers.Alt;
 			}
@@ -79,7 +79,7 @@ namespace Meteor.Engine.Application
 				onKeyDownEvents[bind]?.Invoke();
 
 			//invoke the action for this bind if it exists
-			if(onKeyEvents.ContainsKey(bind))
+			if (onKeyEvents.ContainsKey(bind))
 			{
 				onKeyEvents[bind]?.Invoke();
 
@@ -88,20 +88,20 @@ namespace Meteor.Engine.Application
 			}
 		}
 
-		public static void OnKeyUp(Key key)
+		public static void OnKeyUp(Keys key)
 		{
 			KeyModifiers mods = 0;
-			if (key == Key.LShift || key == Key.RShift)
+			if (key == Keys.LeftShift || key == Keys.RightShift)
 			{
 				mods |= KeyModifiers.Shift;
 			}
 
-			if (key == Key.LControl || key == Key.RControl)
+			if (key == Keys.LeftControl || key == Keys.RightControl)
 			{
 				mods |= KeyModifiers.Ctrl;
 			}
 
-			if (key == Key.LAlt || key == Key.RAlt)
+			if (key == Keys.LeftAlt || key == Keys.RightAlt)
 			{
 				mods |= KeyModifiers.Alt;
 			}

@@ -1,15 +1,14 @@
-﻿using Meteor.Engine.Application;
-using Meteor.Engine.Application.Assets;
-using Meteor.Engine.Graphics;
-using Meteor.Engine.Utils;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Input;
+﻿using MeteorEngine;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
-using Meteor.Engine.Scene;
+using System.IO;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using MeteorEngine.Utils;
 
-namespace Meteor.Game.Data
+namespace MeteorGame
 {
 	/// <summary>
 	/// The World contains the Chunks and manages generating new chunks/freeing old chunks as the player moves, as well as updating
@@ -26,16 +25,15 @@ namespace Meteor.Game.Data
 		private Shader _diffuseShader;
 		private Texture2D _textureAtlas;
 
-		private Mesh m_mesh;
-		private Transform m_meshTransform;
-		private Texture2D m_meshTexture;
+		private GameObject modelObject;
+		private MeshRenderer meshRenderer;
 
 		public World(string blockTypePath, string texturePackPath)
 		{
 			_blockCollection = new BlockTypeCollection();
 			_blockCollection.LoadFromFile(blockTypePath);
 
-			_diffuseShader = Content.Load<Shader>(@"Data\Shaders\diffuse.sh");
+			_diffuseShader = Content.Load<Shader>(@"diffuse.sh");
 
 			_chunks = new Dictionary<ChunkCoord, Chunk>();
 			_neighborQueue = new Queue<ChunkCoord>();
@@ -44,9 +42,12 @@ namespace Meteor.Game.Data
 
 			_textureAtlas = Content.Load<Texture2D>(texturePackPath);
 
-			m_mesh = Content.Load<Mesh>(@"Data\Models\cube.obj");
-			m_meshTexture = Content.Load<Texture2D>(@"Data\Textures\grass.jpg");
-			m_meshTransform = new Transform();
+			modelObject = GameObject.Instantiate("Belt 1", new Transform());
+			meshRenderer = modelObject.AddComponent<MeshRenderer>();
+			meshRenderer.Mesh = Content.Load<Model>(@"Belt1Straight.obj");
+			meshRenderer.Material = new Material(_diffuseShader);
+			meshRenderer.Material.SetColor(new Vector4(0.0f, 0.5f, 0.5f, 1.0f));
+			meshRenderer.Material.SetTexture(TextureType.Diffuse, Content.Load<Texture2D>(@"StraightBeltRed.png"));
 
 			GenerateWorld();
 		}
@@ -64,7 +65,7 @@ namespace Meteor.Game.Data
 
 			//Continue to create new chunks while there are still chunks in this queue.
 			//TODO: Seperate the chunk initialization from the chunk mesh creation
-			while(_neighborQueue.Count > 0)
+			while (_neighborQueue.Count > 0)
 			{
 				CreateNewChunk(_neighborQueue.Dequeue(), ChunkCoord.Zero);
 			}
@@ -73,7 +74,7 @@ namespace Meteor.Game.Data
 		private void CreateNewChunk(ChunkCoord coord, ChunkCoord playerChunk)
 		{
 			//If the _chunks container does not currently contain a chunk at this coordinate, create one.
-			if(!_chunks.ContainsKey(coord))
+			if (!_chunks.ContainsKey(coord))
 			{
 				//Create the new chunk, and initialize its voxel data and mesh
 				_chunks.Add(coord, new Chunk(this, coord));
@@ -82,7 +83,7 @@ namespace Meteor.Game.Data
 				for (int i = 0; i < 4; i++)
 				{
 					//If the distance to the neighbor chunks coordinates is less than or equal to the chunk draw distance, add the neighbor to the queue to be created.
-					if(playerChunk.Distance(coord + ChunkCoord.Neighbors[i]) <= VoxelData.ChunkDrawDistanceInChunks)
+					if (playerChunk.Distance(coord + ChunkCoord.Neighbors[i]) <= VoxelData.ChunkDrawDistanceInChunks)
 					{
 						_neighborQueue.Enqueue(coord + ChunkCoord.Neighbors[i]);
 					}
@@ -107,45 +108,43 @@ namespace Meteor.Game.Data
 			return _blockCollection.ContainsKey(type) ? _blockCollection[type] : null;
 		}
 
-		public void Update()
+		public void Update(float deltaTime)
 		{
-			foreach(Chunk chunk in _chunks.Values)
+			foreach (Chunk chunk in _chunks.Values)
 			{
 				chunk.Update();
 			}
 
-			if(CInput.IsMousePressed(MouseButton.Left))
+			if (CInput.IsMousePressed(MouseButton.Left))
 			{
 				Ray ray = Camera.MainCamera.ScreenToWorld(CInput.MousePosition);
 
 				//Do stuff with the ray
-
 			}
+			
+			modelObject.Transform.RotateY(MathHelper.DegreesToRadians(15.0f) * deltaTime);
 		}
 
 		public void Render(Matrix4 projection, Matrix4 viewMatrix)
 		{
 
-			_diffuseShader.Bind();
-			_diffuseShader.SetUniform("projection", projection);
-			_diffuseShader.SetUniform("view", viewMatrix);
-			//_textureAtlas.Apply();
+			//_diffuseShader.Bind();
+			//_diffuseShader.SetUniform("projection", projection);
+			//_diffuseShader.SetUniform("view", viewMatrix);
+			////_textureAtlas.Apply();
 
-			//foreach (Chunk chunk in _chunks.Values)
-			//{
-			//	if (chunk.IsActive)
-			//	{
-			//		_diffuseShader.SetUniform("model", chunk.WorldMatrix);
-			//		chunk.ChunkBufferObject.Bind();
+			////foreach (Chunk chunk in _chunks.Values)
+			////{
+			////	if (chunk.IsActive)
+			////	{
+			////		_diffuseShader.SetUniform("model", chunk.WorldMatrix);
+			////		chunk.ChunkBufferObject.Bind();
 
-			//		GL.DrawElements(BeginMode.Triangles, chunk.ChunkBufferObject.IndexCount, DrawElementsType.UnsignedInt, 0);
-			//	}
-			//}
+			////		GL.DrawElements(BeginMode.Triangles, chunk.ChunkBufferObject.IndexCount, DrawElementsType.UnsignedInt, 0);
+			////	}
+			////}
 
-			m_meshTexture.Apply();
-			_diffuseShader.SetUniform("model", m_meshTransform.World);
-			m_mesh.Bind();
-			GL.DrawElements(BeginMode.Triangles, m_mesh.IndexCount(), DrawElementsType.UnsignedInt, 0);
+			meshRenderer.OnRender();
 		}
 	}
 }

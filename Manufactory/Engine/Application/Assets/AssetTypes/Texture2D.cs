@@ -1,7 +1,7 @@
-﻿using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
-namespace Meteor.Engine.Application.Assets
+namespace MeteorEngine
 {
 	public class Texture2D : IAsset
 	{
@@ -24,7 +24,6 @@ namespace Meteor.Engine.Application.Assets
 
 		public void Apply()
 		{
-			GL.BindTexture(TextureTarget.Texture2D, 0);
 			GL.BindTexture(TextureTarget.Texture2D, _id);
 		}
 

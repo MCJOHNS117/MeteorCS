@@ -1,7 +1,7 @@
-﻿using Meteor.Engine.Application.Assets;
-using OpenTK;
+﻿using MeteorEngine;
+using OpenTK.Mathematics;
 
-namespace Meteor.Engine.Graphics
+namespace MeteorGame
 {
 	public class ChunkBufferObject
 	{
@@ -23,7 +23,7 @@ namespace Meteor.Engine.Graphics
 			m_mesh.SetUVs(uvs);
 			m_mesh.SetTriangles(triangles);
 		}
-		
+
 		public void Bind()
 		{
 			m_mesh.GetVertexArray().Bind();

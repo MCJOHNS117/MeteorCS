@@ -1,7 +1,7 @@
-﻿using System;
-using Meteor.Engine.Application;
+﻿using MeteorEngine;
+using System;
 
-namespace Manufactory
+namespace Meteor
 {
 	static class Program
 	{
@@ -11,7 +11,7 @@ namespace Manufactory
 		[STAThread]
 		static void Main()
 		{
-			new CWindow().Run(60);
+			new CWindow().Run();
 		}
 	}
 }

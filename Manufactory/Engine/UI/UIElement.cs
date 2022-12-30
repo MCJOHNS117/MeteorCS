@@ -1,51 +1,56 @@
-﻿using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using System;
 
-namespace Meteor.Engine.UI
+namespace MeteorEngine
 {
 	/// <summary>
 	/// The basis for all UI elements.
 	/// </summary>
-	public abstract class UIElement
+	public abstract class UIElement : Component
 	{
-		protected Vector2[] _verticies = new Vector2[4]
+		private Vector4[] quadVerticies = new Vector4[6]
 		{
-			new Vector2(-1.0f, 1.0f),
-			new Vector2(-1.0f, -1.0f),
-			new Vector2(1.0f, 1.0f),
+						//pos		//tex
+			new Vector4(0.0f, 1.0f, 0.0f, 1.0f),
+			new Vector4(1.0f, 0.0f, 1.0f, 0.0f),
+			new Vector4(0.0f, 0.0f, 0.0f, 0.0f),
 
-			new Vector2(1.0f, -1.0f),
-			//new Vector4(-1.0f, -1.0f, 1.0f, 1.0f),
-			//new Vector4(1.0f, -1.0f, 1.0f, 0.0f)
+			new Vector4(0.0f, 1.0f, 0.0f, 1.0f),
+			new Vector4(1.0f, 1.0f, 1.0f, 1.0f),
+			new Vector4(1.0f, 0.0f, 1.0f, 0.0f)
 		};
 
-		protected int _quadVAO;
-		protected int _quadBuffer;
+		private int quadVAO;
+		private int quadBuffer;
 
 		protected UIElement()
 		{
-			_quadVAO = GL.GenVertexArray();
-			_quadBuffer = GL.GenBuffer();
+			quadVAO = GL.GenVertexArray();
+			quadBuffer = GL.GenBuffer();
 
-			GL.BindVertexArray(_quadVAO);
-			GL.BindBuffer(BufferTarget.ArrayBuffer, _quadBuffer);
+			GL.BindBuffer(BufferTarget.ArrayBuffer, quadBuffer);
+			GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * 4 * 6, quadVerticies, BufferUsageHint.StaticDraw);
 
-			GL.NamedBufferStorage(_quadBuffer, 4 * 2 * 4, _verticies, BufferStorageFlags.MapWriteBit);
+			GL.BindVertexArray(quadVAO);
+			GL.EnableVertexArrayAttrib(quadVAO, 0);
+			GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
 
-			GL.VertexArrayAttribBinding(_quadVAO, 0, 0);
-			GL.EnableVertexArrayAttrib(_quadVAO, 0);
-			GL.VertexArrayAttribFormat(_quadVAO, 0, 2, VertexAttribType.Float, false, 0);
-
-			GL.VertexArrayVertexBuffer(_quadVAO, 0, _quadBuffer, IntPtr.Zero, 8);
-			
 			GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
 			GL.BindVertexArray(0);
 		}
 
 		public RectTransform Transform { get; protected set; }
-		
-		public abstract void Update();
-		public abstract void Render();
+
+		protected virtual void OnRender() { }
+
+		public void Render()
+		{
+			OnRender();
+
+			GL.BindVertexArray(quadVAO);
+			GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
+			GL.BindVertexArray(0);
+		}
 	}
 }

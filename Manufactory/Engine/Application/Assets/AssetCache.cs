@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
-namespace Meteor.Engine.Application.Assets
+namespace MeteorEngine
 {
 	public class AssetCache
 	{
@@ -15,7 +16,7 @@ namespace Meteor.Engine.Application.Assets
 
 		public object GetCachedObject(string name)
 		{
-			if(cachedObjects.ContainsKey(name) && cacheReferences.ContainsKey(name))
+			if (cachedObjects.ContainsKey(name) && cacheReferences.ContainsKey(name))
 			{
 				cacheReferences[name]++;
 				return cachedObjects[name];
@@ -37,9 +38,14 @@ namespace Meteor.Engine.Application.Assets
 			}
 		}
 
+		public string GetAssetName(IAsset asset)
+		{
+			return cachedObjects.Where(v => v.Value == asset).FirstOrDefault().Key;
+		}
+
 		public void UnloadObject(string name)
 		{
-			if(cachedObjects.ContainsKey(name) && cacheReferences.ContainsKey(name))
+			if (cachedObjects.ContainsKey(name) && cacheReferences.ContainsKey(name))
 			{
 				if (cacheReferences[name] > 0)
 				{

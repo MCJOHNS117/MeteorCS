@@ -1,7 +1,6 @@
-﻿using OpenTK;
-using OpenTK.Graphics;
+﻿using OpenTK.Mathematics;
 
-namespace Meteor.Engine.Utils
+namespace MeteorEngine
 {
 	public class ObjectFactory
 	{

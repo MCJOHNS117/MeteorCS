@@ -3,66 +3,69 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-namespace Meteor.Engine.Application
+namespace MeteorEngine
 {
 	public static class Settings
 	{
+		//Dictioanry to store the setting strings
 		private static Dictionary<string, string> _settings = new Dictionary<string, string>();
+
+		//A list of changed settings (these are applied when settings are changed.)
 		private static List<string> _changedSettings = new List<string>();
 
+		//Initialized flag
 		private static bool _initialized = false;
 
+		//Disctionary of action handlers for settings changes
 		private static Dictionary<string, Action> _settingsChangedHandlers = new Dictionary<string, Action>();
 
 		public static void Initialize()
 		{
-
+			//Reader to read the file contents
 			StreamReader reader = new StreamReader(File.Open("settings.cfg", FileMode.OpenOrCreate));
-
-
 
 			bool nextLine = true;
 			string line;
-			while(nextLine)
+			while (nextLine) //While there is data to read...
 			{
 				line = "";
 
 				try
 				{
-					line = reader.ReadLine();
+					line = reader.ReadLine(); //Try to read a line
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
-					Debug.WriteLine(e.ToString());
-				}
-
-				if(string.IsNullOrEmpty(line))
-				{
-					nextLine = false;
-					continue;
+					Debug.WriteLine(e.ToString()); //Document an error
 				}
 
-				string[] tokens = line.Split(':');
-				if(!_settings.ContainsKey(tokens[0]))
+				if (string.IsNullOrEmpty(line)) //Validate the string is not null, if it is...
 				{
-					_settings.Add(tokens[0].ToLower(), tokens[1]);
+					nextLine = false; //stop reading input
+					continue; //exit this iteration
+				}
+
+				string[] tokens = line.Split(':'); //Get the tokens for the setting
+				if (!_settings.ContainsKey(tokens[0])) //If the settings map does not contain the setting name (token[0])
+				{
+					_settings.Add(tokens[0].ToLower(), tokens[1]); //Add the tokens to the settings map
 				}
 				else
 				{
-					_settings[tokens[0]] = tokens[1];
+					_settings[tokens[0]] = tokens[1]; //Otherwise, reset the settings value
 				}
 			}
 
-			reader.Close();
+			reader.Close(); //close the reader
 
-			_initialized = true;
+			_initialized = true; //Set our initialized flag
 		}
 
 		public static void Save()
 		{
 			StreamWriter writer = new StreamWriter(File.Open("settings.config", FileMode.Create));
 
-			foreach(string key in _settings.Keys)
+			foreach (string key in _settings.Keys)
 			{
 				writer.WriteLine(key + ":" + _settings[key]);
 			}
@@ -132,34 +135,34 @@ namespace Meteor.Engine.Application
 			int intVal;
 			bool result = GetInt(setting, out intVal);
 
-			if(result)
+			if (result)
 			{
 				if (intVal == 0)
 				{
 					val = false;
 					return true;
 				}
-				else if(intVal == 1)
+				else if (intVal == 1)
 				{
 					val = true;
 					return true;
 				}
 			}
-			
+
 			val = false;
 			return false;
 		}
 
 		public static bool GetFloat(string setting, out float val)
 		{
-			if(_settings.ContainsKey(setting.ToLower()) && _initialized)
+			if (_settings.ContainsKey(setting.ToLower()) && _initialized)
 			{
 				try
 				{
 					val = float.Parse(_settings[setting.ToLower()]);
 					return true;
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					val = 0.0f;
 					return false;
@@ -213,7 +216,7 @@ namespace Meteor.Engine.Application
 
 		public static void SetInt(string setting, int val)
 		{
-			if(_settings.ContainsKey(setting.ToLower()))
+			if (_settings.ContainsKey(setting.ToLower()))
 			{
 				_settings[setting.ToLower()] = "" + val;
 			}

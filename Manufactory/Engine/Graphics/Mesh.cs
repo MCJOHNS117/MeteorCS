@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using Meteor.Engine.Graphics;
-using OpenTK;
+﻿using OpenTK.Mathematics;
 
-namespace Meteor.Engine.Application.Assets
+namespace MeteorEngine
 {
-	public class Mesh : IAsset
+	public class Mesh
 	{
 		private Vector3[] m_vertices;
 		private Vector3[] m_normals;
+		private Vector3[] m_tangents;
 		private Vector2[] m_uvs;
 		private int[] m_triangles;
-		
+
 		private VertexArray m_vertexArray;
 		private IndexBuffer m_indexBuffer;
 
 		private bool m_isDirty;
 
-		public List<Mesh> SubMeshes;
-
 		public Mesh()
 		{
-			SubMeshes = new List<Mesh>();
 			m_vertexArray = new VertexArray();
 			m_isDirty = true;
 		}
@@ -29,6 +24,8 @@ namespace Meteor.Engine.Application.Assets
 		public Vector3[] GetVerticies() { return m_vertices; }
 
 		public Vector3[] GetNormals() { return m_normals; }
+
+		public Vector3[] GetTangents() { return m_tangents; }
 
 		public Vector2[] GetUVs() { return m_uvs; }
 
@@ -41,6 +38,12 @@ namespace Meteor.Engine.Application.Assets
 		public void SetNormals(Vector3[] normals)
 		{
 			m_normals = normals;
+			m_isDirty = true;
+		}
+
+		public void SetTangents(Vector3[] tangents)
+		{
+			m_tangents = tangents;
 			m_isDirty = true;
 		}
 
@@ -66,11 +69,20 @@ namespace Meteor.Engine.Application.Assets
 				m_vertexArray?.Dispose();
 
 				//Generate a new VA
-				int size = (m_vertices.Length * Vector3.SizeInBytes) + (m_normals.Length * Vector3.SizeInBytes) + (m_uvs.Length * Vector2.SizeInBytes);
+				int size = 0;
+				if (m_vertices != null)
+					size += (m_vertices.Length * Vector3.SizeInBytes);
+				if (m_normals != null)
+					size += (m_normals.Length * Vector3.SizeInBytes);
+				if (m_tangents != null)
+					size += (m_tangents.Length * Vector3.SizeInBytes);
+				if (m_uvs != null)
+					size += (m_uvs.Length * Vector2.SizeInBytes);
 
 				VertexBuffer buffer = new VertexBuffer(size);
 				buffer.AddSubData(m_vertices);
 				buffer.AddSubData(m_normals);
+				buffer.AddSubData(m_tangents);
 				buffer.AddSubData(m_uvs);
 
 				m_vertexArray = new VertexArray();
@@ -88,7 +100,7 @@ namespace Meteor.Engine.Application.Assets
 
 		public void Bind()
 		{
-			m_vertexArray.Bind();
+			GetVertexArray().Bind();
 			m_indexBuffer.Bind();
 		}
 

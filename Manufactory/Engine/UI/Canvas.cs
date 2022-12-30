@@ -1,61 +1,48 @@
-﻿using System.Collections.Generic;
-using Meteor.Engine.Application.Assets;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK;
+﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
-namespace Meteor.Engine.UI
+namespace MeteorEngine
 {
-	public class Canvas
+	public class Canvas : Component
 	{
-		private RectTransform _root = new RectTransform();
+		private RectTransform _root;
 
 		private Shader _shader;
 
-		private List<UIElement> _elements;
-
 		private Matrix4 _orthoProjection;
 
-		public Canvas(Matrix4 projection)
+		public Canvas(float x, float y, float width, float height)
 		{
-			_shader = Content.Load<Shader>(@"Data\Shaders\gui.sh");
+			_root = new RectTransform(x, y, width, height);
 
-			_elements = new List<UIElement>();
+			_shader = Content.Load<Shader>(@"gui.sh");
 
-			_orthoProjection = projection;
-		}
-
-		public void AddElement(UIElement element)
-		{
-			if (!_elements.Contains(element))
-				_elements.Add(element);
-		}
-
-		public void Update()
-		{
-			foreach(UIElement element in _elements)
-			{
-				element.Update();
-			}
+			_orthoProjection = Matrix4.CreateOrthographic(width, height, 0.0f, 100.0f);
 		}
 
 		public void Render()
 		{
-			//Pre-render setup
-			GL.UseProgram(_shader.Id);
+			////Pre-render setup
+			//GL.UseProgram(_shader.Id);
 
-			Matrix4 model = Matrix4.Identity;
-			GL.UniformMatrix4(21, false, ref _orthoProjection);
+			//GL.Enable(EnableCap.Blend);
+			//GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+			//GL.Disable(EnableCap.DepthTest);
 
-			//Render loop
-			foreach(UIElement element in _elements)
-			{
-				model = element.Transform.Matrix;
-				GL.UniformMatrix4(20, false, ref model);
+			//Matrix4 model = Matrix4.Identity;
+			//GL.UniformMatrix4(21, false, ref _orthoProjection);
 
-				element.Render();
-			}
+			////Render loop
+			//foreach (UIElement element in _elements)
+			//{
+			//	model = element.Transform.World;
+			//	GL.UniformMatrix4(20, false, ref model);
 
-			//Post-render clean-up
+			//	element.Render();
+			//}
+
+			////Post-render clean-up
+			//GL.Enable(EnableCap.DepthTest);
 		}
 	}
 }

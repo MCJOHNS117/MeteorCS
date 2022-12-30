@@ -1,7 +1,7 @@
-﻿using OpenTK;
+﻿using OpenTK.Mathematics;
 using System.Collections.Generic;
 
-namespace Meteor.Engine.Fonts
+namespace MeteorEngine
 {
 	public class TextMeshCreator
 	{
@@ -28,13 +28,13 @@ namespace Meteor.Engine.Fonts
 			List<Line> lines = new List<Line>();
 			Line currentLine = new Line(metaData.SpaceWidth, text.FontSize, text.MaxLineSize);
 			Word currentWord = new Word(text.FontSize);
-			foreach(char c in chars)
+			foreach (char c in chars)
 			{
 				int ascii = (int)c;
-				if(ascii == SPACE_ASCII)
+				if (ascii == SPACE_ASCII)
 				{
 					bool added = currentLine.TryAddWord(currentWord);
-					if(!added)
+					if (!added)
 					{
 						lines.Add(currentLine);
 						currentLine = new Line(metaData.SpaceWidth, text.FontSize, text.MaxLineSize);
@@ -53,7 +53,7 @@ namespace Meteor.Engine.Fonts
 		private void CompleteStructure(List<Line> lines, Line currentLine, Word currentWord, GUIText text)
 		{
 			bool added = currentLine.TryAddWord(currentWord);
-			if(!added)
+			if (!added)
 			{
 				lines.Add(currentLine);
 				currentLine = new Line(metaData.SpaceWidth, text.FontSize, text.MaxLineSize);
@@ -68,13 +68,13 @@ namespace Meteor.Engine.Fonts
 			float cursorX = 0f;
 			float cursorY = 0f;
 			List<FontVertex> vertices = new List<FontVertex>();
-			foreach(Line line in lines)
+			foreach (Line line in lines)
 			{
 				if (text.Centered)
 					cursorX = (line.MaxLength - line.CurrentLineLength) / 2;
-				foreach(Word word in line.Words)
+				foreach (Word word in line.Words)
 				{
-					foreach(Character token in word.Characters)
+					foreach (Character token in word.Characters)
 					{
 						AddVerticesForCharacter(vertices, cursorX, cursorY, token, text.FontSize);
 						cursorX += token.XAdvance * text.FontSize;

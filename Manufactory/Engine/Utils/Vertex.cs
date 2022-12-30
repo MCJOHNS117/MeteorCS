@@ -1,6 +1,4 @@
-﻿using OpenTK;
-using OpenTK.Graphics;
-
+﻿using OpenTK.Mathematics;
 
 public class Vertex
 {

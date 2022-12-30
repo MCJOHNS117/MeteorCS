@@ -1,7 +1,6 @@
-﻿using OpenTK;
-using OpenTK.Graphics;
+﻿using OpenTK.Mathematics;
 
-namespace Meteor.Engine.Fonts
+namespace MeteorEngine
 {
 	public class GUIText
 	{

@@ -1,6 +1,6 @@
-﻿using OpenTK;
+﻿using OpenTK.Mathematics;
 
-namespace Meteor.Engine.Utils
+namespace MeteorEngine
 {
 	public class Ray
 	{

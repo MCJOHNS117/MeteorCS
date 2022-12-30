@@ -1,4 +1,4 @@
-﻿namespace Meteor.Game.Data
+﻿namespace MeteorGame
 {
 	public enum EDirection
 	{

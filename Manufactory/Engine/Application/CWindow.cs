@@ -1,19 +1,14 @@
-﻿using Meteor.Engine.Application.Assets;
-using Meteor.Engine.Fonts;
-using Meteor.Engine.Graphics;
-using Meteor.Engine.Graphics.Renderers;
-using Meteor.Engine.UI;
-using Meteor.Game.Cameras;
-using Meteor.Game.Data;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Input;
+﻿using MeteorGame;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Meteor.Engine.Application
+namespace MeteorEngine
 {
 	public sealed class CWindow : GameWindow
 	{
@@ -38,7 +33,7 @@ namespace Meteor.Engine.Application
 
 		private bool m_wireframe = false;
 		#endregion
-		public CWindow() : base(1280, 720, GraphicsMode.Default, "Meteor", GameWindowFlags.Default, DisplayDevice.Default, 4, 0, GraphicsContextFlags.Default)
+		public CWindow() : base(new GameWindowSettings() { RenderFrequency = 0.0, UpdateFrequency = 90.0 }, new NativeWindowSettings() { Size = (1280, 720), Title = "OpenTK 4.7 Test", API = ContextAPI.OpenGL, APIVersion = new System.Version(4, 6) })
 		{
 			GL.Enable(EnableCap.DebugOutput);
 
@@ -55,13 +50,11 @@ namespace Meteor.Engine.Application
 			int width, height;
 			if (Settings.GetInt("screen_width", out width) && Settings.GetInt("screen_height", out height))
 			{
-				Width = width;
-				Height = height;
+				Size = (width, height);
 			}
 			else
 			{
-				Width = 1280;
-				Height = 720;
+				Size = (1280, 720);
 			}
 
 			Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
@@ -69,25 +62,27 @@ namespace Meteor.Engine.Application
 		}
 
 		#region GameWindow Implementation
-		protected override void OnResize(EventArgs e)
+		protected override void OnResize(ResizeEventArgs e)
 		{
-			GL.Viewport(0, 0, Width, Height);
+			GL.Viewport(0, 0, e.Width, e.Height);
 			CreateProjection();
 		}
 
-		protected override void OnLoad(EventArgs e)
+		protected override void OnLoad()
 		{
-			CInput.AddKeybind(new KeyBind(Key.Escape), BindType.OnKeyDown, Exit);
-			CInput.AddKeybind(new KeyBind(Key.V), BindType.OnKeyDown, () => {
+			CInput.AddKeybind(new KeyBind(Keys.Escape), BindType.OnKeyDown, Close);
+			CInput.AddKeybind(new KeyBind(Keys.V), BindType.OnKeyDown, () =>
+			{
 				if (VSync == VSyncMode.On)
 					VSync = VSyncMode.Off;
 				else
 					VSync = VSyncMode.On;
 			});
-			CInput.AddKeybind(new KeyBind(Key.F4), BindType.OnKeyDown, () =>
+			CInput.AddKeybind(new KeyBind(Keys.F4), BindType.OnKeyDown, () =>
 			{
-				m_wireframe = !m_wireframe; 
-				GL.PolygonMode(MaterialFace.Front, m_wireframe ? PolygonMode.Line : PolygonMode.Fill); });
+				m_wireframe = !m_wireframe;
+				GL.PolygonMode(MaterialFace.FrontAndBack, m_wireframe ? PolygonMode.Line : PolygonMode.Fill);
+			});
 
 			Camera.MainCamera = new FlyThroughCamera();
 
@@ -99,27 +94,26 @@ namespace Meteor.Engine.Application
 
 			CreateProjection();
 
-			_canvas = new Canvas(_orthoProjection);
-			_canvas.AddElement(new Panel(Content.Load<Texture2D>(@"Data\Textures\UI\panelTest.png"), new Rect(new Vector2(0.5f, 0.5f), new Vector2(.25f, .5f))));
+			_canvas = new Canvas(0.0f, 0.0f, Size.X, Size.Y);
+			_canvas.AddElement(new Panel(Content.Load<Texture2D>(@"UI\panelTest.png"), new Rect(new Vector2(0.5f, 0.5f), new Vector2(.25f, .5f))));
 
 			CursorVisible = true;
 
-			texturedShader = Content.Load<Shader>(@"Data\Shaders\textured.sh");
+			texturedShader = Content.Load<Shader>(@"textured.sh");
 
-			fontShader = Content.Load<Shader>(@"Data\Shaders\font.sh");
+			fontShader = Content.Load<Shader>(@"font.sh");
 
-			diffuseShader = Content.Load<Shader>(@"Data\Shaders\diffuse.sh");
+			diffuseShader = Content.Load<Shader>(@"diffuse.sh");
 
-			FontType berlinsans = new FontType(@"Data\Fonts\berlinsans.fnt", (float)Width / Height);
+			FontType berlinsans = new FontType(@"Data\\Fonts\\berlinsans.fnt", (float)Size.X / Size.Y);
 
-			TextMeshData textMeshData = berlinsans.LoadText(new GUIText("Test GUI text!!", 1.0f, berlinsans, new Vector2(10, 10), 1.0f, false));
-			FontRenderer testFont = new FontRenderer(textMeshData.Vertices, fontShader.Id, Content.Load<Texture2D>(@"Data\Fonts\berlinsans.png"));
-			_fontRenderers.Add(testFont);
+			//TextMeshData textMeshData = berlinsans.LoadText(new GUIText("Test GUI text!!", 1.0f, berlinsans, new Vector2(10, 10), 1.0f, false));
+			//FontRenderer testFont = new FontRenderer(textMeshData.Vertices, fontShader.Id, Content.Load<Texture2D>(@"Data\Fonts\berlinsans.png"));
+			//_fontRenderers.Add(testFont);
 
-			_world = new World(@"Data\Gameplay\Blocks.xml", @"Data\Textures\atlas.png");
-			_world.Update();
+			_world = new World(@"Data\Gameplay\Blocks.xml", @"atlas.png");
 
-			GL.PolygonMode(MaterialFace.Front, PolygonMode.Fill);
+			GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 			GL.PatchParameter(PatchParameterInt.PatchVertices, 3);
 			GL.Enable(EnableCap.DepthTest);
 
@@ -127,10 +121,10 @@ namespace Meteor.Engine.Application
 			GL.FrontFace(FrontFaceDirection.Ccw);
 			GL.CullFace(CullFaceMode.Back);
 
-			Closed += OnClosed;
-
 			m_frameTime = new Stopwatch();
 			m_frameTime.Start();
+
+			base.OnLoad();
 		}
 
 		protected override void OnUpdateFrame(FrameEventArgs e)
@@ -142,12 +136,16 @@ namespace Meteor.Engine.Application
 
 			Camera.MainCamera.Update(elapsed);
 			CInput.Update();
-			_world.Update();
-			_canvas.Update();
+			_world.Update(elapsed);
+			_canvas.Update(elapsed);
+
+			base.OnUpdateFrame(e);
 		}
 
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
+			base.OnRenderFrame(e);
+
 			_time += e.Time;
 			Title = $"{_title}: (Vsync: {VSync}) FPS: {1f / e.Time:000.0}";
 
@@ -162,7 +160,7 @@ namespace Meteor.Engine.Application
 			//add shader attributes here
 			float c = 0.0f;
 			var viewMatrix = Camera.MainCamera.GetViewMatrix();
-			foreach(var renderObject in _renderObjects)
+			foreach (var renderObject in _renderObjects)
 			{
 				var modelView = _modelView * viewMatrix;
 				renderObject.Bind();
@@ -173,7 +171,7 @@ namespace Meteor.Engine.Application
 
 			_world.Render(_perspectiveProjection, viewMatrix);
 
-			foreach(var fontRenderer in _fontRenderers)
+			foreach (var fontRenderer in _fontRenderers)
 			{
 				fontRenderer.Bind();
 
@@ -188,20 +186,16 @@ namespace Meteor.Engine.Application
 			SwapBuffers();
 		}
 
-		private void OnClosed(object sender, EventArgs eventArgs)
-		{
-			Exit();
-		}
-
-		public override void Exit()
+		public override void Close()
 		{
 			foreach (var obj in _renderObjects)
 				obj.Dispose();
 
 			Settings.Save();
 
-			base.Exit();
+			base.Close();
 		}
+
 		protected override void OnKeyDown(KeyboardKeyEventArgs e)
 		{
 			CInput.OnKeyDown(e.Key);
@@ -224,14 +218,14 @@ namespace Meteor.Engine.Application
 
 		protected override void OnMouseMove(MouseMoveEventArgs e)
 		{
-			CInput.OnMouseMove(e.X, e.Y, e.XDelta, e.YDelta);
+			CInput.OnMouseMove(e.X, e.Y, e.DeltaX, e.DeltaY);
 		}
 		#endregion
 
 		#region CWindow Methods
 		private void CreateProjection()
 		{
-			var aspectRatio = (float)Width / Height;
+			var aspectRatio = (float)Size.X / Size.Y;
 
 			float near, far, fov;
 			if (!Settings.GetFloat("near_clip", out near))
@@ -244,7 +238,6 @@ namespace Meteor.Engine.Application
 				fov = 60 * ((float)Math.PI / 180.0f);
 
 			_perspectiveProjection = Matrix4.CreatePerspectiveFieldOfView(fov, aspectRatio, near, far);
-			_orthoProjection = Matrix4.CreateOrthographic(Width, Height, 0.0f, 100.0f);
 		}
 		#endregion
 	}

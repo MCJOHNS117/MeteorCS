@@ -1,7 +1,7 @@
-﻿using OpenTK.Input;
+﻿using OpenTK.Windowing.GraphicsLibraryFramework;
 using System;
 
-namespace Meteor.Engine.Application
+namespace MeteorEngine
 {
 	[Flags]
 	public enum KeyModifiers
@@ -15,9 +15,9 @@ namespace Meteor.Engine.Application
 	{
 		public byte Modifiers { get; protected set; }
 
-		public Key Key { get; protected set; }
+		public Keys Key { get; protected set; }
 
-		public KeyBind(Key key, byte mods = 0)
+		public KeyBind(Keys key, byte mods = 0)
 		{
 			Modifiers = mods;
 			Key = key;
